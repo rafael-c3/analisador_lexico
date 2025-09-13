@@ -1,4 +1,7 @@
-# main.py
+# Membros:
+# Rafael Lucas Carlos Gonçalves
+# João Victor Queiroz
+# José Vieira Stable
 
 from scanner import Scanner
 
