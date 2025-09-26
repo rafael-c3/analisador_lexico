@@ -88,7 +88,6 @@ class Scanner:
                     self.next_char()
                     return Token(TokenType.NOT_EQUAL, "!=")
                 else:
-                    # --- CHAMANDO A FUNÇÃO DE ERRO ---
                     return self.lexical_error(current_char)
             elif current_char in ['+', '-', '*']:
                 return Token(TokenType.MATH_OPERATOR, current_char)
@@ -97,7 +96,6 @@ class Scanner:
             elif current_char == ')':
                 return Token(TokenType.RPAREN, ")")
             else:
-                # --- CHAMANDO A FUNÇÃO DE ERRO PARA QUALQUER OUTRO CARACTERE ---
                 return self.lexical_error(current_char)
 
         return None
@@ -163,11 +161,7 @@ class Scanner:
         return char
 
     def back(self):
-        # Esta função é mais complexa de ajustar com linhas/colunas,
-        # mas como a usamos antes de ler, a posição do erro ainda será correta.
         self.pos -= 1
-        # Simplificação: não voltamos a coluna/linha aqui para evitar complexidade.
-        # A posição do erro será a do caractere *após* o token.
 
     def is_eof(self) -> bool:
         return self.pos >= len(self.source_code)
