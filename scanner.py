@@ -1,5 +1,3 @@
-# scanner.py
-
 from token_type import TokenType
 from token_class import Token
 
@@ -18,7 +16,6 @@ class Scanner:
                 content = f.read()
             self.source_code = content
             self.pos = 0
-            # --- NOVOS CONTADORES DE POSIÇÃO ---
             self.line = 1
             self.column = 1
         except FileNotFoundError:
@@ -33,7 +30,6 @@ class Scanner:
             return None
         return self.source_code[self.pos]
 
-    # --- NOVA FUNÇÃO PARA RELATAR ERROS ---
     def lexical_error(self, char: str) -> Token:
         """Imprime uma mensagem de erro formatada e retorna um token ILEGAL."""
         msg = f"Erro Léxico: Caractere inesperado '{char}' na linha {self.line}, coluna {self.column}."
@@ -152,7 +148,6 @@ class Scanner:
     def is_math_operator(self, c: str) -> bool:
         return c in ['+', '-', '*', '/']
 
-    # --- MÉTODO next_char ATUALIZADO PARA RASTREAR POSIÇÃO ---
     def next_char(self) -> str:
         if self.is_eof(): return '\0'
         

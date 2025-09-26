@@ -8,3 +8,5 @@ float pi = 3.14;
 if (pi > 3) {
   print(pi) ç # Erro na linha 8
 }
+
+1.a
