@@ -3,7 +3,7 @@ from token_class import Token
 
 # A "Tabela de Palavras Reservadas" exigida no projeto.
 # Usamos um dicionário Python para mapear a string da palavra-chave
-# para o seu tipo de token correspondente (TokenType).
+# para o seu tipo de token correspondente (TokenType)
 KEYWORDS = {
     "int": TokenType.INT,
     "float": TokenType.FLOAT,
