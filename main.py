@@ -4,15 +4,18 @@
 # José Vieira Stable
 
 from scanner import Scanner
+from parser import Parser
 
 def main():
-    sc = Scanner("programa.mc")
+    try:
+        sc = Scanner("programa.mc")
+        parser = Parser(sc)
 
-    while True:
-        tk = sc.next_token()
-        if tk is None:
-            break
-        print(tk)
+        parser.parse_programa()
+
+    except Exception as e:
+        
+        print(f"Erro de Compilação: {e}")
 
 if __name__ == "__main__":
     main()
