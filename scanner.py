@@ -63,7 +63,6 @@ class Scanner:
                 self.skip_single_line_comment()
                 continue
             
-            # --- CORREÇÃO: Adicionado suporte para comentários // ---
             if current_char == '/':
                 if self.peek_char() == '*':      # Se for /*
                     self.skip_multi_line_comment()
@@ -71,10 +70,8 @@ class Scanner:
                 elif self.peek_char() == '/':    # Se for //
                     self.skip_single_line_comment()
                     continue
-                else:                            # Se for apenas /
+                else:                            
                     return Token(TokenType.SLASH, "/") # Operador de divisão
-
-            # --- 3. RECONHECIMENTO DE TOKENS DA GRAMÁTICA ---
 
             # Identificadores e Palavras-chave
             if self.is_letter(current_char):
@@ -129,16 +126,12 @@ class Scanner:
                     return Token(TokenType.OP_LOGICO, "||")
                 else:
                     return self.lexical_error(current_char)
-
-            # --- CORREÇÃO: Operadores Matemáticos separados ---
             elif current_char == '+':
                 return Token(TokenType.PLUS, "+")
             elif current_char == '-':
                 return Token(TokenType.MINUS, "-")
             elif current_char == '*':
                 return Token(TokenType.ASTERISK, "*")
-            
-            # --- NOVO: Adicionado o operador Módulo (%) ---
             elif current_char == '%':
                 return Token(TokenType.MODULO, "%")
 
@@ -155,14 +148,10 @@ class Scanner:
                 return Token(TokenType.SEMICOLON, ";")
             elif current_char == ':':
                 return Token(TokenType.COLON, ":")
-
-            # Se não for nada disso, é um erro
             else:
                 return self.lexical_error(current_char)
 
         return Token(TokenType.EOF, "") # Fim do arquivo
-
-    # --- Funções de Leitura Especializada ---
 
     def read_identifier(self) -> Token:
         """Lê um identificador completo e decide se é uma ID ou Palavra-chave."""
@@ -183,10 +172,6 @@ class Scanner:
         return Token(token_type, literal)
 
     def read_number(self) -> Token:
-        """
-        Lê um número (inteiro ou float) de forma "gananciosa" e o valida.
-        Correção para o bug '1.1.1.1'.
-        """
         start_pos = self.pos
         
         while self.is_digit(self.peek_char()) or self.peek_char() == '.':
@@ -218,8 +203,6 @@ class Scanner:
         
         self.next_char() # Consome o " de fechamento
         return Token(TokenType.CADEIA, literal)
-
-    # --- Funções Auxiliares (sem mudanças) ---
 
     def skip_single_line_comment(self):
         while self.peek_char() not in ['\n', '\r', None]:
