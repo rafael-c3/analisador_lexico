@@ -19,7 +19,7 @@ class Parser:
         if self.current_token and self.current_token.type == expected_type:
             self.advance()
         else:
-            # Erro Sintático!
+            # Erro Sintático
             raise Exception(f"Erro Sintático: Esperado {expected_type}, mas encontrou {self.current_token.type if self.current_token else 'EOF'}")
 
     def parse_programa(self):
@@ -28,7 +28,7 @@ class Parser:
         self.consume(TokenType.LPAREN)
         self.consume(TokenType.RPAREN)
         self.consume(TokenType.LBRACE)
-        self.parse_corpo() # Chama a função da próxima regra
+        self.parse_corpo()
         self.consume(TokenType.RBRACE)
         if self.current_token.type != TokenType.EOF:
             raise Exception(f"Erro Sintático: Lixo encontrado após o '}}' final: {self.current_token.type}")
@@ -48,10 +48,10 @@ class Parser:
         elif self.current_token.type == TokenType.CONST:
             self.consume(TokenType.CONST)
         
-        self.consume(TokenType.ID)
-        self.consume(TokenType.COLON)
-        self.parse_tipo() # Chama a função para 'tipo'
-        self.consume(TokenType.SEMICOLON)
+        self.consume(TokenType.ID)        # Consome o nome da variável (identificador)
+        self.consume(TokenType.COLON)     # Consome os dois pontos ':'
+        self.parse_tipo()                 # Verifica se o tipo é válido
+        self.consume(TokenType.SEMICOLON) # Consome o ponto e vírgula ';' obrigatório
 
     def parse_tipo(self):
         if self.current_token.type == TokenType.NUMBER:
@@ -69,22 +69,22 @@ class Parser:
         if self.current_token and self.current_token.type == TokenType.PLUS:
             self.consume(TokenType.PLUS)
             self.parse_termo()
-            self.parse_expressaoAritmetica_linha() # Chamada recursiva
+            self.parse_expressaoAritmetica_linha()
         elif self.current_token and self.current_token.type == TokenType.MINUS:
             self.consume(TokenType.MINUS)
             self.parse_termo()
-            self.parse_expressaoAritmetica_linha() # Chamada recursiva
+            self.parse_expressaoAritmetica_linha()
         else:
-            pass # Caso Vazio (ε)
+            pass
 
     def parse_comandos(self):
         tokens_de_inicio = [
-            TokenType.ID, 
-            TokenType.READ, 
-            TokenType.CONSOLE_LOG,
-            TokenType.IF,
-            TokenType.WHILE,
-            TokenType.LBRACE
+            TokenType.ID,           # Começo de atribuição (x = ...)
+            TokenType.READ,         # Comando de leitura
+            TokenType.CONSOLE_LOG,  # Comando de escrita
+            TokenType.IF,           # Condicional
+            TokenType.WHILE,        # Loop
+            TokenType.LBRACE        # Bloco isolado { ... }
         ]
         
         while self.current_token and self.current_token.type in tokens_de_inicio:
@@ -121,13 +121,14 @@ class Parser:
         self.consume(TokenType.LPAREN)
         self.consume(TokenType.ID)
         self.consume(TokenType.RPAREN)
-        self.consume(TokenType.SEMICOLON)
+        self.consume(TokenType.SEMICOLON) # Consome o ';'
 
     def parse_escrita(self):
         print("Parse: Escrita") # (Temporário para debug)
         self.consume(TokenType.CONSOLE_LOG)
         self.consume(TokenType.LPAREN)
         
+        # Verifica se vamos imprimir uma variável (ID) ou um Texto (CADEIA)
         if self.current_token.type not in [TokenType.ID, TokenType.CADEIA]:
              raise Exception(f"Erro Sintático: Esperado ID ou CADEIA no console.log, encontrou {self.current_token.type}")
         self.advance()
@@ -143,6 +144,7 @@ class Parser:
         self.consume(TokenType.RPAREN)
         self.parse_blocoInterno()
         
+        # Verifica (opcionalmente) se existe um ELSE logo depois
         if self.current_token and self.current_token.type == TokenType.ELSE:
             self.consume(TokenType.ELSE)
             self.parse_blocoInterno()
@@ -200,12 +202,13 @@ class Parser:
         self.parse_expressaoRelacional_linha()
 
     def parse_expressaoRelacional_linha(self):
+        # Verifica operadores lógicos (&&, ||)
         if self.current_token and self.current_token.type == TokenType.OP_LOGICO:
             self.consume(TokenType.OP_LOGICO)
             self.parse_termoRelacional()
             self.parse_expressaoRelacional_linha()
         else:
-            pass # Caso Vazio (ε)
+            pass
 
     def parse_termoRelacional(self):
         self.parse_expressaoAritmetica()
